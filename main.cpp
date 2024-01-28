@@ -1,47 +1,73 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-
-
 using namespace std;
 
-int game(int maximum)
+class Game
 {
+public:
+    Game(int maxN);
+    ~Game();
+    void play();
+private:
+    void printGameResult();
+    int maxNumber;
+    int playerQuess;
+    int randomNumber;
+    int numOfGuesses;
+};
+
+Game::Game(int maxN)
+{
+    maxNumber = maxN;
+    playerQuess = 0;
+    numOfGuesses = 0;
     srand(std::time(0));
-    short randomValue = (rand()%maximum)+1;
-    short userValue;
+    cout<<"GAME CONSTRUCTOR: object initialized with "<< maxN<<" as a maximum value"<<endl;
+}
+
+Game::~Game()
+{
+    cout<<"GAME DESTRUCTOR: object cleared from stack memory"<<endl;
+}
+
+void Game::play()
+{
     bool stayInLoop = true;
-    short count = 0;
+    short randomNumber = (rand()%maxNumber)+1;  //random number between 1-maxNumber
+    numOfGuesses = 0;
+
     while(stayInLoop)
     {
-        cout<<"Give your guess between 1-"<<maximum<<endl;
-        cin>>userValue;
-        count++;
-        if(userValue == randomValue)
+        cout<<"Give your guess between 1-"<<maxNumber<<endl;
+        cin>>playerQuess;
+        if(playerQuess == randomNumber)
         {
-            cout<<"Arvasit oikein luku = "<<userValue<<endl;
+            cout<<"Your quess is right = "<<playerQuess<<endl;
             stayInLoop = false;
         }
-        else if(userValue<randomValue)
+        else if(playerQuess<randomNumber)
         {
-            cout<<"Lukusi on liian pieni"<<endl;
+            cout<<"Your guess is too small"<<endl;
         }
         else
         {
-            cout<<"Lukusi on liian suuri"<<endl;
+            cout<<"Your guess is too big"<<endl;
         }
 
-
+        numOfGuesses++;
     }
-    return count;
+    printGameResult();
+}
+
+void Game::printGameResult()
+{
+    cout<<"You quessed the right answer = "<<playerQuess<<" with "<<numOfGuesses<<" quesses"<<endl;
 }
 
 int main()
 {
-    cout << "Lets play...!" << endl;
-    short range = 0;
-    cout << "Give max value"<<endl;
-    cin>>range;
-    cout << "Your result = "<<game(range)<<endl;
+    Game gameObject(10);
+    gameObject.play();
     return 0;
 }
